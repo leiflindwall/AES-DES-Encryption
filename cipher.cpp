@@ -20,6 +20,8 @@ int main(int argc, char** argv)
 
 	 string aes = "AES";
  	 string des = "DES";
+	 string enc = "ENC";
+	 string dec = "DEC";
 	 string current_cipher = argv[1];
 	 string current_key = argv[2];
 	 string current_op = argv[3];
@@ -27,6 +29,7 @@ int main(int argc, char** argv)
 	 string out = argv[5];
 	 ofstream outfile;
 	 string plaintext, ciphertext;
+	 //unsigned char* plaintext, ciphertext;
 	 fstream infile(argv[4], fstream::in);
 
 	 // read the plaintext
@@ -34,6 +37,19 @@ int main(int argc, char** argv)
 
 	 cout << "plaintext: " << plaintext << endl;
 	 cout << "**************\n" << endl;
+
+	 // covert plaintext string to unsigned char*
+	 int n = plaintext.length();
+
+	 char ptext[n + 1];
+
+	 strcpy(ptext, plaintext.c_str());
+
+	 unsigned char pptext[n + 1];
+	 for(int i = 0; i < n; i++)
+	 {
+		 pptext[i] = ptext[i];
+	 }
 
 	 // close the input file
 	 infile.close();
@@ -95,7 +111,58 @@ int main(int argc, char** argv)
 		cipher->setKey((unsigned char*)"0123456789abcdef");
 
 		/* Perform encryption */
-		//string cipherText = cipher->encrypt("hello world");
+
+
+		if(current_op.compare(enc) == 0)
+		{
+				/* Perform encryption */
+				unsigned char* cipherText;
+
+				for(int i = 0; i < plaintext.size()/8; i+=8)
+				{
+					cipherText = cipher->encrypt(pptext + i);
+
+					for(int i = 0; i < plaintext.size() + 1; i++)
+					{
+						outfile << cipherText[i];
+					}
+				}
+
+				// works for one block
+				//unsigned char* cipherText = cipher->encrypt(pptext);
+				//cout << "ENCRYPT: " << endl << ciphertext << endl << endl;
+				//for(int i = 0; i < plaintext.size() + 1; i++)
+				//{
+				//	outfile << cipherText[i];
+				//}
+				//outfile << ciphertext;
+				outfile.close();
+			}
+			else if(current_op.compare(dec) == 0)
+			{
+					/* Perform encryption */
+					unsigned char* originalText;
+
+					for(int i = 0; i < plaintext.size()/8; i+=8)
+					{
+						originalText = cipher->encrypt(pptext + i);
+
+						for(int i = 0; i < plaintext.size() + 1; i++)
+						{
+							outfile << originalText[i];
+						}
+					}
+
+					// works for one block
+					//unsigned char* cipherText = cipher->encrypt(pptext);
+					//cout << "ENCRYPT: " << endl << ciphertext << endl << endl;
+
+					outfile.close();
+				}
+			else
+			{
+				cout << "Invalid operation: must be ENC/DEC for encrypt/decrypt\n";
+			}
 
 		/* Perform decryption */
 		//cipher->decrypt(cipherText);
