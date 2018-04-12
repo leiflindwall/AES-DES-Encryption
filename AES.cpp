@@ -1,5 +1,7 @@
 #include "AES.h"
 
+AES_KEY enc_key, dec_key;
+
 /**
  * Sets the key to use
  * @param key - the first byte of this represents whether
@@ -25,7 +27,6 @@ bool AES::setKey(const unsigned char* keyArray)
 	// Both functions return 0 on success and other values on faliure.
 	// For documentation, please see https://boringssl.googlesource.com/boringssl/+/2623/include/openssl/aes.h
 	// and aes.cpp example provided with the assignment.
-	AES_KEY enc_key, dec_key;
 
 
 	unsigned char* key = new unsigned char;
@@ -55,7 +56,6 @@ bool AES::setKey(const unsigned char* keyArray)
 	fprintf(stderr, "**key set successfully!\n");
 
 	return false;
-
 }
 
 /**
@@ -67,11 +67,28 @@ unsigned char* AES::encrypt(const unsigned char* plainText)
 {
 
 	//TODO: 1. Dynamically allocate a block to store the ciphertext.
+	unsigned char enc_out[16];
+	unsigned char* bytes_out = new unsigned char[16];
+	//unsigned char* enc_bytes[16];
+
+	memset(enc_out, 0, 16);
+
 	//	2. Use AES_ecb_encrypt(...) to encrypt the text (please see the URL in setKey(...)
 	//	and the aes.cpp example provided.
+	AES_ecb_encrypt(plainText, enc_out, &enc_key, AES_ENCRYPT);
 	// 	3. Return the pointer to the ciphertext
 
-	return NULL;
+	fprintf(stderr, "***ciphertext: ");
+	for(int i = 0; i < 16; i++)
+	{
+		bytes_out[i] = enc_out[i];
+		fprintf(stderr, "%c", bytes_out[i]);
+	}
+	fprintf(stderr, "\n");
+
+
+
+	return bytes_out;
 }
 
 /**

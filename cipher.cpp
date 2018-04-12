@@ -162,7 +162,7 @@ int main(int argc, char** argv)
 	 			}
 				else if(current_op.compare(dec) == 0)
 	 			{
-	 				/* Perform encryption */
+	 				/* Perform decryption */
 	 				unsigned char* cipherText = new unsigned char;
 
 	 				for(int i = 0; i < n; i+=8)
@@ -193,7 +193,7 @@ int main(int argc, char** argv)
 	 				cout << "decryption finished successfully\n";
 
 	 				outfile.close();
-	 				}
+	 			}
 
 		 }
 		 else if(current_cipher.compare(aes) == 0)
@@ -230,6 +230,53 @@ int main(int argc, char** argv)
 				 cout << endl;
 				 cipher->setKey(key);
 				 cout << "key set successfully" << endl;
+
+				 // AES encryption
+				 // perform encryption
+				 if(current_op.compare(enc) == 0)
+		 		 {
+		 				/* Perform encryption */
+		 				unsigned char* cipherText = new unsigned char[16];
+
+		 				for(int i = 0; i < n; i+=16)
+		 				{
+		 					// encrypt from i to i + 8
+		 					cout << "i: " << i << endl;
+		 					unsigned char* current_block = new unsigned char;
+		 					cout << "***current block: ";
+		 					for(int j = 0; j < 16; j++)
+		 					{
+		 						current_block[j] = plaintext[i + j];
+		 						cout << current_block[j];
+		 					}
+		 					cout << endl;
+
+		 					cipherText = cipher->encrypt(current_block);
+							cout << "encryption successful.\n";
+
+		 					cout << "***ciphertext from this block: ";
+		 					for(int i = 0; i < 16; i++)
+		 					{
+		 						outfile << cipherText[i];
+		 						cout << cipherText[i];
+		 					}
+		 					cout << endl;
+
+		 				}
+
+		 				cout << "encryption finished successfully\n";
+
+		 				outfile.close();
+
+						//exit(1);
+		 			}
+					else if(current_op.compare(dec) == 0)
+		 			{
+		 				/* Perform decryption */
+
+		 			}
+
+
 
 				 // quit for now to avoid error dump
 				 exit(1);

@@ -81,12 +81,10 @@ unsigned char* DES::encrypt(const unsigned char* plaintext)
 	unsigned char plainText[8];
 
 	// make a non-const copy of the plaintext BLOCK
-
 	for(int i = 0; i < 8; i++)
 	{
 		plainText[i] = plaintext[i];
 	}
-
 	fprintf(stderr, "plaintext from this block: %s\n", plainText);
 
 	//2. Declate an array DES_LONG block[2];
