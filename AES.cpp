@@ -10,7 +10,7 @@
  */
 bool AES::setKey(const unsigned char* keyArray)
 {
-	
+
 	// TODO: AES implementation of openssl cares about whether
 	// you are encrypting or decrypting when setting the key.
 	// That is, when encrypting you use function AES_set_encrypt_key(...)
@@ -25,26 +25,53 @@ bool AES::setKey(const unsigned char* keyArray)
 	// Both functions return 0 on success and other values on faliure.
 	// For documentation, please see https://boringssl.googlesource.com/boringssl/+/2623/include/openssl/aes.h
 	// and aes.cpp example provided with the assignment.
-	
-	
+	AES_KEY enc_key, dec_key;
+
+
+	unsigned char* key = new unsigned char;
+	if(keyArray[0] == 0)
+	{
+			for(int i = 1; i < 33; i++)
+			{
+				key[i - 1] = keyArray[i];
+			}
+
+			/* Set the encryption key */
+			if(AES_set_encrypt_key(key, 128, &enc_key)!=0)
+			{
+				fprintf(stderr, "AES_set_encrypt_key() failed!\n");
+				exit(-1);
+			}
+	}
+	else
+	{
+		if(AES_set_decrypt_key(key, 128, &dec_key)!=0)
+		{
+			fprintf(stderr, "AES_set_decrypt_key() failed!\n");
+			exit(-1);
+		}
+	}
+
+	fprintf(stderr, "**key set successfully!\n");
+
 	return false;
-	
+
 }
 
-/**	
+/**
  * Encrypts a plaintext string
  * @param plaintext - the plaintext string
  * @return - the encrypted ciphertext string
  */
 unsigned char* AES::encrypt(const unsigned char* plainText)
 {
-	
+
 	//TODO: 1. Dynamically allocate a block to store the ciphertext.
 	//	2. Use AES_ecb_encrypt(...) to encrypt the text (please see the URL in setKey(...)
 	//	and the aes.cpp example provided.
 	// 	3. Return the pointer to the ciphertext
-		
-	return NULL;	
+
+	return NULL;
 }
 
 /**
@@ -54,14 +81,11 @@ unsigned char* AES::encrypt(const unsigned char* plainText)
  */
 unsigned char* AES::decrypt(const unsigned char* cipherText)
 {
-	
+
 	//TODO: 1. Dynamically allocate a block to store the plaintext.
 	//	2. Use AES_ecb_encrypt(...) to decrypt the text (please see the URL in setKey(...)
 	//	and the aes.cpp example provided.
 	// 	3. Return the pointer to the plaintext
-		
+
 	return NULL;
 }
-
-
-

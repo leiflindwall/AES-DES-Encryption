@@ -40,7 +40,7 @@ int main(int argc, char** argv)
 
 	 // covert plaintext string to unsigned char*
 	 int n = plaintext.length() - 1;
-	 cout << "plaintext length: " << n << endl;
+	 cout << "plaintext length: " << n+1 << endl;
 
 	 // close the input file
 	 infile.close();
@@ -104,6 +104,7 @@ int main(int argc, char** argv)
 
 		 if(current_cipher.compare(des) == 0)
 		 {
+			 // check the key, then check
 			 if(current_key.length() != 16)
 			 {
 				 cout << "Invalid DES key! Must be 64bit (16 characters) hexidecimal characters\n";
@@ -123,102 +124,120 @@ int main(int argc, char** argv)
 				 cout << endl;
 				 cipher->setKey(key);
 			 }
+
+			 // perform encryption
+			 if(current_op.compare(enc) == 0)
+	 		 {
+	 				/* Perform encryption */
+	 				unsigned char* cipherText = new unsigned char;
+
+	 				for(int i = 0; i < n; i+=8)
+	 				{
+	 					// encrypt from i to i + 8
+	 					cout << "i: " << i << endl;
+	 					unsigned char* current_block = new unsigned char;
+	 					cout << "***current block: ";
+	 					for(int j = 0; j < 8; j++)
+	 					{
+	 						current_block[j] = plaintext[i + j];
+	 						cout << current_block[j];
+	 					}
+	 					cout << endl;
+
+	 					cipherText = cipher->encrypt(current_block);
+
+	 					cout << "***ciphertext from this block: ";
+	 					for(int i = 0; i < 8; i++)
+	 					{
+	 						outfile << cipherText[i];
+	 						cout << cipherText[i];
+	 					}
+	 					cout << endl;
+
+	 				}
+
+	 				cout << "encryption finished successfully\n";
+
+	 				outfile.close();
+	 			}
+				else if(current_op.compare(dec) == 0)
+	 			{
+	 				/* Perform encryption */
+	 				unsigned char* cipherText = new unsigned char;
+
+	 				for(int i = 0; i < n; i+=8)
+	 				{
+	 					// encrypt from i to i + 8
+	 					cout << "i: " << i << endl;
+	 					unsigned char* current_block = new unsigned char;
+	 					cout << "***current block: ";
+	 					for(int j = 0; j < 8; j++)
+	 					{
+	 						current_block[j] = plaintext[i + j];
+	 						cout << current_block[j];
+	 					}
+	 					cout << endl;
+
+	 					cipherText = cipher->decrypt(current_block);
+
+	 					cout << "***ciphertext from this block: ";
+	 					for(int i = 0; i < 8; i++)
+	 					{
+	 						outfile << cipherText[i];
+	 						cout << cipherText[i];
+	 					}
+	 					cout << endl;
+
+	 				}
+
+	 				cout << "decryption finished successfully\n";
+
+	 				outfile.close();
+	 				}
+
 		 }
 		 else if(current_cipher.compare(aes) == 0)
 		 {
-			 if(current_key.length() != 16)
+			 // check then set the AES key
+			 if(current_key.length() != 32)
 			 {
 				 cout << "Invalid AES key! Must be 128bit (32 characters) hexidecimal characters\n";
 				 exit(1);
 			 }
 			 else
 			 {
-				 cout << "current key: ";
-				 for(int i = 0; i < 32; i++)
+				 if(current_op.compare(enc) == 0)
 				 {
-					 	if(isxdigit(current_key[i]))
+					 // set first char of key to 0 for encrypt
+					 key[0] = 0;
+				 }
+				 else
+				 {
+					 // set first char of key to 1 for decrypt
+					 key[0] = 1;
+				 }
+
+
+				 cout << "current key: ";
+				 for(int i = 1; i < 33; i++)
+				 {
+					 	if(isxdigit(current_key[i-1]))
 						{
-							key[i] = current_key[i];
+							key[i] = current_key[i-1];
 							cout << key[i];
 						}
 				 }
 				 cout << endl;
 				 cipher->setKey(key);
+				 cout << "key set successfully" << endl;
+
+				 // quit for now to avoid error dump
+				 exit(1);
 			 }
+
+
 		 }
-
-
-		/* Perform encryption */
-
-		if(current_op.compare(enc) == 0)
-		{
-				/* Perform encryption */
-				unsigned char* cipherText = new unsigned char;
-
-				for(int i = 0; i < n; i+=8)
-				{
-					// encrypt from i to i + 8
-					cout << "i: " << i << endl;
-					unsigned char* current_block = new unsigned char;
-					cout << "***current block: ";
-					for(int j = 0; j < 8; j++)
-					{
-						current_block[j] = plaintext[i + j];
-						cout << current_block[j];
-					}
-					cout << endl;
-
-					cipherText = cipher->encrypt(current_block);
-
-					cout << "***ciphertext from this block: ";
-					for(int i = 0; i < 8; i++)
-					{
-						outfile << cipherText[i];
-						cout << cipherText[i];
-					}
-					cout << endl;
-
-				}
-
-				cout << "encryption finished successfully\n";
-
-				outfile.close();
-			}
-			else if(current_op.compare(dec) == 0)
-			{
-				/* Perform encryption */
-				unsigned char* cipherText = new unsigned char;
-
-				for(int i = 0; i < n; i+=8)
-				{
-					// encrypt from i to i + 8
-					cout << "i: " << i << endl;
-					unsigned char* current_block = new unsigned char;
-					cout << "***current block: ";
-					for(int j = 0; j < 8; j++)
-					{
-						current_block[j] = plaintext[i + j];
-						cout << current_block[j];
-					}
-					cout << endl;
-
-					cipherText = cipher->decrypt(current_block);
-
-					cout << "***ciphertext from this block: ";
-					for(int i = 0; i < 8; i++)
-					{
-						outfile << cipherText[i];
-						cout << cipherText[i];
-					}
-					cout << endl;
-
-				}
-
-				cout << "decryption finished successfully\n";
-
-				outfile.close();
-				}
-			else
+		 else
 			{
 				cout << "Invalid operation: must be ENC/DEC for encrypt/decrypt\n";
 			}
