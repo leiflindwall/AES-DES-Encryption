@@ -74,15 +74,20 @@ unsigned char* DES::encrypt(const unsigned char* plaintext)
 {
 	//LOGIC:
 	//1. Check to make sure that the block is exactly 8 characters (i.e. 64 bits)
+	fprintf(stderr, "trying to encrypt now...\n");
 
-// fix
-	unsigned char cipherText[9];
-	unsigned char plainText[9];
+// fix, why 8 or 9?
+	unsigned char cipherText[8];
+	unsigned char plainText[8];
 
-	for(int i = 0; i < 9; i++)
+	// make a non-const copy of the plaintext BLOCK
+
+	for(int i = 0; i < 8; i++)
 	{
 		plainText[i] = plaintext[i];
 	}
+
+	fprintf(stderr, "plaintext from this block: %s\n", plainText);
 
 	//2. Declate an array DES_LONG block[2];
 	DES_LONG block[2];
@@ -130,8 +135,7 @@ unsigned char* DES::encrypt(const unsigned char* plaintext)
  */
 unsigned char* DES::decrypt(const unsigned char* ciphertext)
 {
-	//LOGIC:
-	// Same logic as encrypt(), except in step 5. decrypt instead of encrypting
+
 }
 
 /**

@@ -41,16 +41,6 @@ int main(int argc, char** argv)
 	 // covert plaintext string to unsigned char*
 	 int n = plaintext.length();
 
-	 char ptext[n + 1];
-
-	 strcpy(ptext, plaintext.c_str());
-
-	 unsigned char pptext[n + 1];
-	 for(int i = 0; i < n; i++)
-	 {
-		 pptext[i] = ptext[i];
-	 }
-
 	 // close the input file
 	 infile.close();
 
@@ -118,14 +108,29 @@ int main(int argc, char** argv)
 				/* Perform encryption */
 				unsigned char* cipherText;
 
-				for(int i = 0; i < plaintext.size()/8; i+=8)
+				for(int i = 0; i < n; i+=8)
 				{
-					cipherText = cipher->encrypt(pptext + i);
+					// encrypt from i to i + 8
 
-					for(int i = 0; i < plaintext.size() + 1; i++)
+					unsigned char* current_block;
+					cout << "***current block: ";
+					for(int j = 0; j < 8; j++)
+					{
+						current_block[j] = plaintext[i + j];
+						cout << current_block[j];
+					}
+					cout << endl;
+
+					cipherText = cipher->encrypt(current_block);
+
+					cout << "***ciphertext from this block: ";
+					for(int i = 0; i < 8; i++)
 					{
 						outfile << cipherText[i];
+						cout << cipherText[i];
 					}
+					cout << endl;
+
 				}
 
 				// works for one block
@@ -140,18 +145,8 @@ int main(int argc, char** argv)
 			}
 			else if(current_op.compare(dec) == 0)
 			{
-					/* Perform encryption */
-					unsigned char* originalText;
 
-					for(int i = 0; i < plaintext.size()/8; i+=8)
-					{
-						originalText = cipher->encrypt(pptext + i);
 
-						for(int i = 0; i < plaintext.size() + 1; i++)
-						{
-							outfile << originalText[i];
-						}
-					}
 
 					// works for one block
 					//unsigned char* cipherText = cipher->encrypt(pptext);
