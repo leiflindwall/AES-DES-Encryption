@@ -5,7 +5,7 @@ cipher:	cipher.o DES.o AES.o
 
 
 cipher.o:	cipher.cpp
-	g++ -std=c++11 -g -c cipher.cpp
+	g++ -std=c++11 -Wall -g -c cipher.cpp
 
 mydes:	mydes.cpp
 	g++ -std=c++11 mydes.cpp -o mydes -lcrypto

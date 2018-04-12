@@ -39,7 +39,8 @@ int main(int argc, char** argv)
 	 cout << "**************\n" << endl;
 
 	 // covert plaintext string to unsigned char*
-	 int n = plaintext.length();
+	 int n = plaintext.length() - 1;
+	 cout << "plaintext length: " << n << endl;
 
 	 // close the input file
 	 infile.close();
@@ -106,13 +107,13 @@ int main(int argc, char** argv)
 		if(current_op.compare(enc) == 0)
 		{
 				/* Perform encryption */
-				unsigned char* cipherText;
+				unsigned char* cipherText = new unsigned char;
 
 				for(int i = 0; i < n; i+=8)
 				{
 					// encrypt from i to i + 8
-
-					unsigned char* current_block;
+					cout << "i: " << i << endl;
+					unsigned char* current_block = new unsigned char;
 					cout << "***current block: ";
 					for(int j = 0; j < 8; j++)
 					{
@@ -133,14 +134,8 @@ int main(int argc, char** argv)
 
 				}
 
-				// works for one block
-				//unsigned char* cipherText = cipher->encrypt(pptext);
-				//cout << "ENCRYPT: " << endl << ciphertext << endl << endl;
-				//for(int i = 0; i < plaintext.size() + 1; i++)
-				//{
-				//	outfile << cipherText[i];
-				//}
-				//outfile << ciphertext;
+				cout << "encryption finished successfully\n";
+
 				outfile.close();
 			}
 			else if(current_op.compare(dec) == 0)
@@ -158,33 +153,6 @@ int main(int argc, char** argv)
 			{
 				cout << "Invalid operation: must be ENC/DEC for encrypt/decrypt\n";
 			}
-
-		/* Perform decryption */
-		//cipher->decrypt(cipherText);
-
-/*
-		if(current_op.compare(enc) == 0)
-			{
-				/* Perform encryption */
-	/*			ciphertext = cipher->encrypt(plaintext);
-				cout << "ENCRYPT: " << endl << ciphertext << endl << endl;
-				outfile << ciphertext;
-				outfile.close();
-			}
-			else if(current_op.compare(dec) == 0)
-			{
-				/* Perform decryption */
-/*				string originaltext = cipher->decrypt(plaintext);
-				cout << "DECRYPT: " << endl << originaltext << endl << endl;
-				outfile << originaltext;
-				outfile.close();
-			}
-			else
-			{
-				cout << "Invalid operation: must be ENC/DEC for encrypt/decrypt\n";
-			}
-
-			*/
 	}
 
 	//system("pause");
