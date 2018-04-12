@@ -29,7 +29,7 @@ int main(int argc, char** argv)
 	 string out = argv[5];
 	 ofstream outfile;
 	 string plaintext, ciphertext;
-	 //unsigned char* plaintext, ciphertext;
+	 unsigned char* key = new unsigned char;
 	 fstream infile(argv[4], fstream::in);
 
 	 // read the plaintext
@@ -99,10 +99,56 @@ int main(int argc, char** argv)
 		 * Your program should take input from
 		 * command line.
 		 */
-		cipher->setKey((unsigned char*)"0123456789abcdef");
+
+		 cout << "key length: " << current_key.length() << endl;
+
+		 if(current_cipher.compare(des) == 0)
+		 {
+			 if(current_key.length() != 16)
+			 {
+				 cout << "Invalid DES key! Must be 64bit (16 characters) hexidecimal characters\n";
+				 exit(1);
+			 }
+			 else
+			 {
+				 cout << "current key: ";
+				 for(int i = 0; i < 16; i++)
+				 {
+					 	if(isxdigit(current_key[i]))
+						{
+							key[i] = current_key[i];
+							cout << key[i];
+						}
+				 }
+				 cout << endl;
+				 cipher->setKey(key);
+			 }
+		 }
+		 else if(current_cipher.compare(aes) == 0)
+		 {
+			 if(current_key.length() != 16)
+			 {
+				 cout << "Invalid AES key! Must be 128bit (32 characters) hexidecimal characters\n";
+				 exit(1);
+			 }
+			 else
+			 {
+				 cout << "current key: ";
+				 for(int i = 0; i < 32; i++)
+				 {
+					 	if(isxdigit(current_key[i]))
+						{
+							key[i] = current_key[i];
+							cout << key[i];
+						}
+				 }
+				 cout << endl;
+				 cipher->setKey(key);
+			 }
+		 }
+
 
 		/* Perform encryption */
-
 
 		if(current_op.compare(enc) == 0)
 		{
