@@ -33,7 +33,7 @@ int main(int argc, char** argv)
 	 fstream infile(argv[4], fstream::in);
 
 	 // read the plaintext
-	 getline(infile, plaintext, '\0');
+	 getline(infile, plaintext);
 
 	 cout << "plaintext: " << plaintext << endl;
 	 cout << "**************\n" << endl;
@@ -140,14 +140,37 @@ int main(int argc, char** argv)
 			}
 			else if(current_op.compare(dec) == 0)
 			{
+				/* Perform encryption */
+				unsigned char* cipherText = new unsigned char;
 
+				for(int i = 0; i < n; i+=8)
+				{
+					// encrypt from i to i + 8
+					cout << "i: " << i << endl;
+					unsigned char* current_block = new unsigned char;
+					cout << "***current block: ";
+					for(int j = 0; j < 8; j++)
+					{
+						current_block[j] = plaintext[i + j];
+						cout << current_block[j];
+					}
+					cout << endl;
 
+					cipherText = cipher->decrypt(current_block);
 
-					// works for one block
-					//unsigned char* cipherText = cipher->encrypt(pptext);
-					//cout << "ENCRYPT: " << endl << ciphertext << endl << endl;
+					cout << "***ciphertext from this block: ";
+					for(int i = 0; i < 8; i++)
+					{
+						outfile << cipherText[i];
+						cout << cipherText[i];
+					}
+					cout << endl;
 
-					outfile.close();
+				}
+
+				cout << "decryption finished successfully\n";
+
+				outfile.close();
 				}
 			else
 			{
