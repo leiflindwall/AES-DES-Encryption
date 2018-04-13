@@ -30,6 +30,8 @@ int main(int argc, char** argv)
 	 ofstream outfile;
 	 string plaintext, ciphertext;
 	 unsigned char* key = new unsigned char;
+	 unsigned char* cipherText = new unsigned char[16];
+	 unsigned char* current_block = new unsigned char;
 	 fstream infile(argv[4], fstream::in);
 
 	 // read the plaintext
@@ -83,7 +85,6 @@ int main(int argc, char** argv)
 		cout << "Non-valid choice of cipher\n" << endl;
 	}
 
-
 	/* Error checks */
 	if(!cipher)
 	{
@@ -99,9 +100,7 @@ int main(int argc, char** argv)
 		 * Your program should take input from
 		 * command line.
 		 */
-
 		 cout << "key length: " << current_key.length() << endl;
-
 		 if(current_cipher.compare(des) == 0)
 		 {
 			 // check the key, then check
@@ -129,13 +128,11 @@ int main(int argc, char** argv)
 			 if(current_op.compare(enc) == 0)
 	 		 {
 	 				/* Perform encryption */
-	 				unsigned char* cipherText = new unsigned char;
-
 	 				for(int i = 0; i < n; i+=8)
 	 				{
 	 					// encrypt from i to i + 8
-	 					cout << "i: " << i << endl;
-	 					unsigned char* current_block = new unsigned char;
+	 					cout << "\ni: " << i << endl;
+
 	 					cout << "***current block: ";
 	 					for(int j = 0; j < 8; j++)
 	 					{
@@ -153,23 +150,16 @@ int main(int argc, char** argv)
 	 						cout << cipherText[i];
 	 					}
 	 					cout << endl;
-
 	 				}
-
 	 				cout << "encryption finished successfully\n";
-
-	 				outfile.close();
 	 			}
 				else if(current_op.compare(dec) == 0)
 	 			{
 	 				/* Perform decryption */
-	 				unsigned char* cipherText = new unsigned char;
-
 	 				for(int i = 0; i < n; i+=8)
 	 				{
 	 					// encrypt from i to i + 8
-	 					cout << "i: " << i << endl;
-	 					unsigned char* current_block = new unsigned char;
+	 					cout << "\ni: " << i << endl;
 	 					cout << "***current block: ";
 	 					for(int j = 0; j < 8; j++)
 	 					{
@@ -187,14 +177,9 @@ int main(int argc, char** argv)
 	 						cout << cipherText[i];
 	 					}
 	 					cout << endl;
-
 	 				}
-
 	 				cout << "decryption finished successfully\n";
-
-	 				outfile.close();
 	 			}
-
 		 }
 		 else if(current_cipher.compare(aes) == 0)
 		 {
@@ -217,7 +202,6 @@ int main(int argc, char** argv)
 					 key[0] = 1;
 				 }
 
-
 				 cout << "current key: ";
 				 for(int i = 1; i < 33; i++)
 				 {
@@ -232,17 +216,15 @@ int main(int argc, char** argv)
 				 cout << "key set successfully" << endl;
 
 				 // AES encryption
-				 // perform encryption
 				 if(current_op.compare(enc) == 0)
 		 		 {
 		 				/* Perform encryption */
-		 				unsigned char* cipherText = new unsigned char[16];
-
 		 				for(int i = 0; i < n; i+=16)
 		 				{
 		 					// encrypt from i to i + 8
 		 					cout << "i: " << i << endl;
-		 					unsigned char* current_block = new unsigned char;
+
+							memset(current_block, 0, 16);
 		 					cout << "***current block: ";
 		 					for(int j = 0; j < 16; j++)
 		 					{
@@ -250,6 +232,8 @@ int main(int argc, char** argv)
 		 						cout << current_block[j];
 		 					}
 		 					cout << endl;
+
+							memset(cipherText, 0, 16);
 
 		 					cipherText = cipher->encrypt(current_block);
 							cout << "encryption successful.\n";
@@ -261,34 +245,54 @@ int main(int argc, char** argv)
 		 						cout << cipherText[i];
 		 					}
 		 					cout << endl;
-
+							memset(current_block, 0, 16);
 		 				}
-
 		 				cout << "encryption finished successfully\n";
-
-		 				outfile.close();
-
-						//exit(1);
+						memset(cipherText, 0, 16);
 		 			}
 					else if(current_op.compare(dec) == 0)
 		 			{
 		 				/* Perform decryption */
+		 				for(int i = 0; i < n; i+=16)
+		 				{
+		 					// encrypt from i to i + 8
+		 					cout << "i: " << i << endl;
 
+		 					cout << "***current block: ";
+		 					for(int j = 0; j < 16; j++)
+		 					{
+		 						current_block[j] = plaintext[i + j];
+		 						cout << current_block[j];
+		 					}
+		 					cout << endl;
+
+		 					cipherText = cipher->decrypt(current_block);
+							cout << "decryption successful.\n";
+
+		 					cout << "***plaitext from this block: ";
+		 					for(int i = 0; i < 16; i++)
+		 					{
+		 						outfile << cipherText[i];
+		 						cout << cipherText[i];
+		 					}
+		 					cout << endl;
+		 				}
+		 				cout << "decryption finished successfully\n";
 		 			}
-
-
-
 				 // quit for now to avoid error dump
 				 exit(1);
 			 }
-
-
 		 }
 		 else
 			{
 				cout << "Invalid operation: must be ENC/DEC for encrypt/decrypt\n";
 			}
 	}
+
+	delete current_block;
+	delete key;
+	delete cipherText;
+	outfile.close();
 
 	//system("pause");
 	return 0;

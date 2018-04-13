@@ -74,7 +74,6 @@ unsigned char* DES::encrypt(const unsigned char* plaintext)
 {
 	//LOGIC:
 	//1. Check to make sure that the block is exactly 8 characters (i.e. 64 bits)
-	fprintf(stderr, "trying to encrypt now...\n");
 
 // fix, why 8 or 9?
 	unsigned char cipherText[8];

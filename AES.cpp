@@ -65,13 +65,13 @@ bool AES::setKey(const unsigned char* keyArray)
  */
 unsigned char* AES::encrypt(const unsigned char* plainText)
 {
-
 	//TODO: 1. Dynamically allocate a block to store the ciphertext.
 	unsigned char enc_out[16];
 	unsigned char* bytes_out = new unsigned char[16];
 	//unsigned char* enc_bytes[16];
 
 	memset(enc_out, 0, 16);
+	memset(bytes_out, 0, 16);
 
 	//	2. Use AES_ecb_encrypt(...) to encrypt the text (please see the URL in setKey(...)
 	//	and the aes.cpp example provided.
@@ -86,8 +86,6 @@ unsigned char* AES::encrypt(const unsigned char* plainText)
 	}
 	fprintf(stderr, "\n");
 
-
-
 	return bytes_out;
 }
 
@@ -98,11 +96,5 @@ unsigned char* AES::encrypt(const unsigned char* plainText)
  */
 unsigned char* AES::decrypt(const unsigned char* cipherText)
 {
-
-	//TODO: 1. Dynamically allocate a block to store the plaintext.
-	//	2. Use AES_ecb_encrypt(...) to decrypt the text (please see the URL in setKey(...)
-	//	and the aes.cpp example provided.
-	// 	3. Return the pointer to the plaintext
-
 	return NULL;
 }
