@@ -96,5 +96,33 @@ unsigned char* AES::encrypt(const unsigned char* plainText)
  */
 unsigned char* AES::decrypt(const unsigned char* cipherText)
 {
-	return NULL;
+	//TODO: 1. Dynamically allocate a block to store the ciphertext.
+	unsigned char dec_out[16];
+	unsigned char* bytes_out = new unsigned char[16];
+	//unsigned char* enc_bytes[16];
+
+	memset(dec_out, 0, 16);
+	memset(bytes_out, 0, 16);
+
+	fprintf(stderr, "***ciphertext: ");
+	for(int i = 0; i < 16; i++)
+	{
+		fprintf(stderr, "%c", cipherText[i]);
+	}
+	fprintf(stderr, "\n");
+
+	//	2. Use AES_ecb_encrypt(...) to encrypt the text (please see the URL in setKey(...)
+	//	and the aes.cpp example provided.
+	AES_ecb_encrypt(cipherText, dec_out, &dec_key, AES_DECRYPT);
+	// 	3. Return the pointer to the ciphertext
+
+	fprintf(stderr, "***plaintext: ");
+	for(int i = 0; i < 16; i++)
+	{
+		bytes_out[i] = dec_out[i];
+		fprintf(stderr, "%c", bytes_out[i]);
+	}
+	fprintf(stderr, "\n");
+
+	return bytes_out;
 }

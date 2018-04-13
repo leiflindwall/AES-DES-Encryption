@@ -28,6 +28,7 @@ int main(int argc, char** argv)
 	 string in = argv[4];
 	 string out = argv[5];
 	 ofstream outfile;
+	 //fstream outfile(argv[5], fstream::out);
 	 string plaintext, ciphertext;
 	 unsigned char* key = new unsigned char;
 	 unsigned char* cipherText = new unsigned char[16];
@@ -215,6 +216,8 @@ int main(int argc, char** argv)
 				 cipher->setKey(key);
 				 cout << "key set successfully" << endl;
 
+
+
 				 // AES encryption
 				 if(current_op.compare(enc) == 0)
 		 		 {
@@ -244,6 +247,7 @@ int main(int argc, char** argv)
 		 						outfile << cipherText[i];
 		 						cout << cipherText[i];
 		 					}
+							outfile.flush();
 		 					cout << endl;
 							memset(current_block, 0, 16);
 		 				}
@@ -253,11 +257,12 @@ int main(int argc, char** argv)
 					else if(current_op.compare(dec) == 0)
 		 			{
 		 				/* Perform decryption */
-		 				for(int i = 0; i < n; i+=16)
+						for(int i = 0; i < n; i+=16)
 		 				{
 		 					// encrypt from i to i + 8
 		 					cout << "i: " << i << endl;
 
+							memset(current_block, 0, 16);
 		 					cout << "***current block: ";
 		 					for(int j = 0; j < 16; j++)
 		 					{
@@ -266,18 +271,23 @@ int main(int argc, char** argv)
 		 					}
 		 					cout << endl;
 
+							memset(cipherText, 0, 16);
+
 		 					cipherText = cipher->decrypt(current_block);
 							cout << "decryption successful.\n";
 
-		 					cout << "***plaitext from this block: ";
+		 					cout << "***plaintext from this block: ";
 		 					for(int i = 0; i < 16; i++)
 		 					{
 		 						outfile << cipherText[i];
 		 						cout << cipherText[i];
 		 					}
+							outfile.flush();
 		 					cout << endl;
+							memset(current_block, 0, 16);
 		 				}
-		 				cout << "decryption finished successfully\n";
+		 				cout << "deryption finished successfully\n";
+						memset(cipherText, 0, 16);
 		 			}
 				 // quit for now to avoid error dump
 				 exit(1);
