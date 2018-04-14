@@ -112,7 +112,7 @@ int main(int argc, char** argv)
 			 // check the key, then check
 			 if(current_key.length() != 16)
 			 {
-				 cout << "Invalid DES key! Must be 64bit (16 characters) hexidecimal characters\n";
+				 cout << "Invalid DES key! Must be 16 hexidecimal characters\n";
 				 exit(1);
 			 }
 			 else
@@ -139,7 +139,7 @@ int main(int argc, char** argv)
 	 					// encrypt from i to i + 8
 	 					cout << "\ni: " << i << endl;
 
-	 					cout << "***current block: ";
+	 					cout << "***current plaintext block: ";
 	 					for(int j = 0; j < 8; j++)
 	 					{
 	 						current_block[j] = plaintext[i + j];
@@ -157,7 +157,7 @@ int main(int argc, char** argv)
 	 					}
 	 					cout << endl;
 	 				}
-	 				cout << "encryption finished successfully\n";
+	 				cout << "\nencryption finished successfully\n\n";
 	 			}
 				else if(current_op.compare(dec) == 0)
 	 			{
@@ -166,7 +166,7 @@ int main(int argc, char** argv)
 	 				{
 	 					// encrypt from i to i + 8
 	 					cout << "\ni: " << i << endl;
-	 					cout << "***current block: ";
+	 					cout << "***current ciphertext block: ";
 	 					for(int j = 0; j < 8; j++)
 	 					{
 	 						current_block[j] = plaintext[i + j];
@@ -176,7 +176,7 @@ int main(int argc, char** argv)
 
 	 					cipherText = cipher->decrypt(current_block);
 
-	 					cout << "***ciphertext from this block: ";
+	 					cout << "***plaintext from this block: ";
 	 					for(int i = 0; i < 8; i++)
 	 					{
 	 						outfile << cipherText[i];
@@ -184,7 +184,7 @@ int main(int argc, char** argv)
 	 					}
 	 					cout << endl;
 	 				}
-	 				cout << "decryption finished successfully\n";
+	 				cout << "\ndecryption finished successfully\n\n";
 	 			}
 		 }
 		 else if(current_cipher.compare(aes) == 0)
@@ -192,7 +192,7 @@ int main(int argc, char** argv)
 			 // check then set the AES key
 			 if(current_key.length() != 16)
 			 {
-				 cout << "Invalid AES key! Must be 16 characters hexidecimal characters\n";
+				 cout << "Invalid AES key! Must be 16 hexidecimal characters\n";
 				 exit(1);
 			 }
 			 else
@@ -219,9 +219,6 @@ int main(int argc, char** argv)
 				 }
 				 cout << endl;
 				 cipher->setKey(key);
-				 cout << "key set successfully" << endl;
-
-
 
 				 // AES encryption
 				 if(current_op.compare(enc) == 0)
@@ -233,7 +230,7 @@ int main(int argc, char** argv)
 		 					cout << "\ni: " << i << endl;
 
 							memset(current_block, 0, 17);
-		 					cout << "***current block: ";
+		 					cout << "***current plaintext block: ";
 		 					for(int j = 0; j < 16; j++)
 		 					{
 		 						current_block[j] = plaintext[i + j];
@@ -244,7 +241,6 @@ int main(int argc, char** argv)
 							memset(cipherText, 0, 17);
 
 		 					cipherText = cipher->encrypt(current_block);
-							cout << "encryption successful.\n";
 
 		 					cout << "***ciphertext from this block: ";
 		 					for(int i = 0; i < 16; i++)
@@ -257,7 +253,7 @@ int main(int argc, char** argv)
 							memset(current_block, 0, 17);
 
 		 				}
-		 				cout << "encryption finished successfully\n";
+		 				cout << "\nencryption finished successfully\n\n";
 						memset(cipherText, 0, 16);
 		 			}
 					else if(current_op.compare(dec) == 0)
@@ -269,7 +265,7 @@ int main(int argc, char** argv)
 		 					cout << "\ni: " << i << endl;
 
 							memset(current_block, 0, 17);
-		 					cout << "***current block: ";
+		 					cout << "***current ciphertext block: ";
 		 					for(int j = 0; j < 16; j++)
 		 					{
 		 						current_block[j] = plaintext[i + j];
@@ -280,7 +276,6 @@ int main(int argc, char** argv)
 							memset(cipherText, 0, 17);
 
 		 					cipherText = cipher->decrypt(current_block);
-							cout << "decryption successful.\n";
 
 		 					cout << "***plaintext from this block: ";
 							printf("%s\n", cipherText);
@@ -294,7 +289,7 @@ int main(int argc, char** argv)
 		 					cout << endl;
 							memset(current_block, 0, 17);
 		 				}
-		 				cout << "decryption finished successfully\n";
+		 				cout << "\ndecryption finished successfully\n\n";
 						memset(cipherText, 0, 16);
 		 			}
 				 // quit for now to avoid error dump

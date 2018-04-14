@@ -17,7 +17,7 @@ Instructions:
     <CIPHER NAME> : Name of the cipher to use. Valid names are:
         AES
         DES
-    <KEY> : The encryption key to use.
+    <KEY> : The encryption key to use - must be 16 characters.
     <ENC/DEC> : Choose wheter to encrypt or decrypt, respectively.
     <INPUT FILE> : the file from which to read the input.
     <OUTPUT FILE> : the file to which the output shall be written
@@ -25,3 +25,5 @@ Instructions:
  Extra Credit:
 
  Notes:
+
+ in.txt, small.txt, big.txt were used as input testing files, out.txt was the output file
