@@ -28,14 +28,17 @@ bool AES::setKey(const unsigned char* keyArray)
 	// For documentation, please see https://boringssl.googlesource.com/boringssl/+/2623/include/openssl/aes.h
 	// and aes.cpp example provided with the assignment.
 
+	//const static unsigned char aes_key[]={0x00,0x11,0x22,0x33,0x44,0x55,0x66,0x77,0x88,0x99,0xAA,0xBB,0xCC,0xDD,0xEE,0xFF};
 
-	unsigned char* key = new unsigned char;
+	unsigned char* key = new unsigned char[16];
 	if(keyArray[0] == 0)
 	{
-			for(int i = 1; i < 33; i++)
+			for(int i = 1; i < 17; i++)
 			{
 				key[i - 1] = keyArray[i];
+				fprintf(stderr, "%c ", key[i]);
 			}
+
 
 			/* Set the encryption key */
 			if(AES_set_encrypt_key(key, 128, &enc_key)!=0)
@@ -43,18 +46,23 @@ bool AES::setKey(const unsigned char* keyArray)
 				fprintf(stderr, "AES_set_encrypt_key() failed!\n");
 				exit(-1);
 			}
+			fprintf(stderr, "**encryption key set successfully!\n");
 	}
 	else
 	{
+		for(int i = 1; i < 17; i++)
+		{
+			key[i - 1] = keyArray[i];
+			fprintf(stderr, "%c ", key[i]);
+		}
+
 		if(AES_set_decrypt_key(key, 128, &dec_key)!=0)
 		{
 			fprintf(stderr, "AES_set_decrypt_key() failed!\n");
 			exit(-1);
 		}
+		fprintf(stderr, "**decryption key set successfully!\n");
 	}
-
-	fprintf(stderr, "**key set successfully!\n");
-
 	return false;
 }
 
@@ -73,18 +81,21 @@ unsigned char* AES::encrypt(const unsigned char* plainText)
 	memset(enc_out, 0, 16);
 	memset(bytes_out, 0, 16);
 
+	//fprintf(stderr, "***plaintext: ");
+	//fprintf(stderr, "%s\n", plainText);
+
 	//	2. Use AES_ecb_encrypt(...) to encrypt the text (please see the URL in setKey(...)
 	//	and the aes.cpp example provided.
 	AES_ecb_encrypt(plainText, enc_out, &enc_key, AES_ENCRYPT);
 	// 	3. Return the pointer to the ciphertext
 
-	fprintf(stderr, "***ciphertext: ");
+
 	for(int i = 0; i < 16; i++)
 	{
 		bytes_out[i] = enc_out[i];
-		fprintf(stderr, "%c", bytes_out[i]);
 	}
-	fprintf(stderr, "\n");
+	//fprintf(stderr, "***ciphertext: ");
+	//fprintf(stderr, "%s\n", bytes_out);
 
 	return bytes_out;
 }
@@ -97,32 +108,37 @@ unsigned char* AES::encrypt(const unsigned char* plainText)
 unsigned char* AES::decrypt(const unsigned char* cipherText)
 {
 	//TODO: 1. Dynamically allocate a block to store the ciphertext.
-	unsigned char dec_out[16];
-	unsigned char* bytes_out = new unsigned char[16];
+	unsigned char dec_out[17];
+	unsigned char* bytes_out = new unsigned char[17];
+	unsigned char ctext[17];
 	//unsigned char* enc_bytes[16];
 
-	memset(dec_out, 0, 16);
-	memset(bytes_out, 0, 16);
+	memset(dec_out, 0, 17);
+	memset(bytes_out, 0, 17);
+	memset(ctext, 0, 17);
+
+	// make a non-pointer copy
+	for(int i = 0; i < 17; i++)
+	{
+		ctext[i] = cipherText[i];
+	}
 
 	fprintf(stderr, "***ciphertext: ");
-	for(int i = 0; i < 16; i++)
-	{
-		fprintf(stderr, "%c", cipherText[i]);
-	}
-	fprintf(stderr, "\n");
+	fprintf(stderr, "%s\n", ctext);
 
 	//	2. Use AES_ecb_encrypt(...) to encrypt the text (please see the URL in setKey(...)
 	//	and the aes.cpp example provided.
 	AES_ecb_encrypt(cipherText, dec_out, &dec_key, AES_DECRYPT);
 	// 	3. Return the pointer to the ciphertext
 
+
+
 	fprintf(stderr, "***plaintext: ");
-	for(int i = 0; i < 16; i++)
+	fprintf(stderr, "%s\n", dec_out);
+	for(int i = 0; i < 17; i++)
 	{
 		bytes_out[i] = dec_out[i];
-		fprintf(stderr, "%c", bytes_out[i]);
 	}
-	fprintf(stderr, "\n");
 
 	return bytes_out;
 }

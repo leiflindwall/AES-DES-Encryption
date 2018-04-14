@@ -4,6 +4,7 @@
 #include "DES.h"
 #include "AES.h"
 #include <fstream>
+#include <sstream>
 
 using namespace std;
 
@@ -29,14 +30,18 @@ int main(int argc, char** argv)
 	 string out = argv[5];
 	 ofstream outfile;
 	 //fstream outfile(argv[5], fstream::out);
-	 string plaintext, ciphertext;
+	 //string plaintext, ciphertext;
+	 string ciphertext;
 	 unsigned char* key = new unsigned char;
-	 unsigned char* cipherText = new unsigned char[16];
+	 unsigned char* cipherText = new unsigned char[17];
 	 unsigned char* current_block = new unsigned char;
-	 fstream infile(argv[4], fstream::in);
+	 ifstream infile(argv[4]);
 
 	 // read the plaintext
-	 getline(infile, plaintext);
+	 //getline(infile, plaintext);
+	 std::stringstream buff;
+	 buff << infile.rdbuf();
+	 string plaintext(buff.str());
 
 	 cout << "plaintext: " << plaintext << endl;
 	 cout << "**************\n" << endl;
@@ -185,9 +190,9 @@ int main(int argc, char** argv)
 		 else if(current_cipher.compare(aes) == 0)
 		 {
 			 // check then set the AES key
-			 if(current_key.length() != 32)
+			 if(current_key.length() != 16)
 			 {
-				 cout << "Invalid AES key! Must be 128bit (32 characters) hexidecimal characters\n";
+				 cout << "Invalid AES key! Must be 16 characters hexidecimal characters\n";
 				 exit(1);
 			 }
 			 else
@@ -204,7 +209,7 @@ int main(int argc, char** argv)
 				 }
 
 				 cout << "current key: ";
-				 for(int i = 1; i < 33; i++)
+				 for(int i = 1; i < 17; i++)
 				 {
 					 	if(isxdigit(current_key[i-1]))
 						{
@@ -225,9 +230,9 @@ int main(int argc, char** argv)
 		 				for(int i = 0; i < n; i+=16)
 		 				{
 		 					// encrypt from i to i + 8
-		 					cout << "i: " << i << endl;
+		 					cout << "\ni: " << i << endl;
 
-							memset(current_block, 0, 16);
+							memset(current_block, 0, 17);
 		 					cout << "***current block: ";
 		 					for(int j = 0; j < 16; j++)
 		 					{
@@ -236,7 +241,7 @@ int main(int argc, char** argv)
 		 					}
 		 					cout << endl;
 
-							memset(cipherText, 0, 16);
+							memset(cipherText, 0, 17);
 
 		 					cipherText = cipher->encrypt(current_block);
 							cout << "encryption successful.\n";
@@ -249,7 +254,8 @@ int main(int argc, char** argv)
 		 					}
 							outfile.flush();
 		 					cout << endl;
-							memset(current_block, 0, 16);
+							memset(current_block, 0, 17);
+
 		 				}
 		 				cout << "encryption finished successfully\n";
 						memset(cipherText, 0, 16);
@@ -260,9 +266,9 @@ int main(int argc, char** argv)
 						for(int i = 0; i < n; i+=16)
 		 				{
 		 					// encrypt from i to i + 8
-		 					cout << "i: " << i << endl;
+		 					cout << "\ni: " << i << endl;
 
-							memset(current_block, 0, 16);
+							memset(current_block, 0, 17);
 		 					cout << "***current block: ";
 		 					for(int j = 0; j < 16; j++)
 		 					{
@@ -271,22 +277,24 @@ int main(int argc, char** argv)
 		 					}
 		 					cout << endl;
 
-							memset(cipherText, 0, 16);
+							memset(cipherText, 0, 17);
 
 		 					cipherText = cipher->decrypt(current_block);
 							cout << "decryption successful.\n";
 
 		 					cout << "***plaintext from this block: ";
+							printf("%s\n", cipherText);
 		 					for(int i = 0; i < 16; i++)
 		 					{
 		 						outfile << cipherText[i];
-		 						cout << cipherText[i];
+		 						//cout << (char)cipherText[i];
 		 					}
+
 							outfile.flush();
 		 					cout << endl;
-							memset(current_block, 0, 16);
+							memset(current_block, 0, 17);
 		 				}
-		 				cout << "deryption finished successfully\n";
+		 				cout << "decryption finished successfully\n";
 						memset(cipherText, 0, 16);
 		 			}
 				 // quit for now to avoid error dump
