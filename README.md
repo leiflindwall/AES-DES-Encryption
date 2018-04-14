@@ -26,4 +26,6 @@ Instructions:
 
  Notes:
 
- in.txt, small.txt, big.txt were used as input testing files, out.txt was the output file
+ -in.txt, small.txt, big.txt were used as input testing files, out.txt was the output file
+ -padding may be randomly added when encrypting the large file, resulting in a few Extra
+  characters at the end.
